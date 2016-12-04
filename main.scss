@@ -1,0 +1,39 @@
+//
+// # Flatten
+// =============================================================================
+
+@function util-flatten($list) {
+  $result: ();
+  @each $item in $list {
+    $type: type-of($item);
+    @if $type == 'list' or $type == 'map' {
+      $result: join($result, flatten($item));
+    }
+    @else {
+      $result: join($result, $item);
+    }
+  }
+  @return $result;
+}
+
+//
+// # Merge
+// =============================================================================
+
+@function util-merge($list, $delimiter: '') {
+  @if type-of($delimiter) != 'string' {
+    @error 'taffy-util:: merge: `$delimiter` must be a string.';
+  }
+  $result: null;
+  @each $item in $list {
+    @if $item {
+      @if $result {
+        $result: $result + $delimiter + $item;
+      }
+      @else {
+        $result: $item;
+      }
+    }
+  }
+  @return $result;
+}
